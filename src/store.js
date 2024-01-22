@@ -1,7 +1,8 @@
 import {create} from "zustand";
 
 const store = (set) => ({
-    tasks: [{id: 523456, title: 'TestTask', state: 'PLANNED'}]
+    tasks: [{title: 'TestTask', state: 'PLANNED'}],
+    addTask: (title, state) => set((store) => ({tasks: [...store.tasks, {title, state}]})),
 });
 
 export const useStore = create(store);
