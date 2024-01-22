@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useState } from 'react';
+import classNames from 'classnames';
 import Task from './Task';
 import { useStore } from '../store';
 import './Column.css';
@@ -7,6 +8,7 @@ import './Column.css';
 const Column = ({ state }) => {
 	const [text, setText] = useState('');
 	const [open, setOpen] = useState(false);
+	const [drop, setDrop] = useState(false);
 
 	const tasks = useStore(store => store.tasks.filter(task => task.state === state));
 	const addTask = useStore(store => store.addTask);
@@ -16,9 +18,17 @@ const Column = ({ state }) => {
 
 	return (
 		<div
-			className="column"
-			onDragOver={e => e.preventDefault()}
+			className={classNames('column', { drop: drop })}
+			onDragOver={e => {
+				setDrop(true);
+				e.preventDefault();
+			}}
+			onDragLeave={e => {
+				setDrop(false);
+				e.preventDefault();
+			}}
 			onDrop={() => {
+				setDrop(false);
 				moveTask(draggedTask, state);
 				setDraggedTask(null);
 			}}
