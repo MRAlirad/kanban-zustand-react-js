@@ -10,9 +10,19 @@ const Column = ({ state }) => {
 
 	const tasks = useStore(store => store.tasks.filter(task => task.state === state));
 	const addTask = useStore(store => store.addTask);
+	const setDraggedTask = useStore(store => store.setDraggedTask);
+	const draggedTask = useStore(store => store.draggedTask);
+	const moveTask = useStore(store => store.moveTask);
 
 	return (
-		<div className="column">
+		<div
+			className="column"
+			onDragOver={e => e.preventDefault()}
+			onDrop={() => {
+				moveTask(draggedTask, state);
+				setDraggedTask(null);
+			}}
+		>
 			<div className="titleWrapper">
 				<p>{state}</p>
 				<button
@@ -25,7 +35,7 @@ const Column = ({ state }) => {
 			</div>
 			{tasks.map(task => (
 				<Task
-					key={Math.random()}
+					key={task.title}
 					title={task.title}
 				/>
 			))}
